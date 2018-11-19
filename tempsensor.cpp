@@ -1,8 +1,11 @@
 //Authors: Bader, Edgar, Edmund, Emanuel, Nicole
 //
 //Date: 18 Nov 2018
+//
 //Assignment: Final Project
-//File: tempsensor.cpp
+//
+//Description: tempsensor.cpp is where all relevant functions for
+//the adafruit temperature sensor and conversions
 //----------------------------------------------------------//
 
 #include "tempsensor.h"
