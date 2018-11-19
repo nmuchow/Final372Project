@@ -1,13 +1,12 @@
-//Author: Nicole Muchow
-//Date: 10 November 2018
+//Authors: Bader, Edgar, Edmund, Emanuel, Nicole
+//
+//Date: 18 Nov 2018
 //
 //Assignment: Final Project
 //
-//
-//Description: This is the header file for the temperature sensor (tempsensor.cpp)
-//
-//-------------------------------------------------------------
-
+//Description: this is the header file for the tempsensor.cpp
+//file
+//----------------------------------------------------------//
 #ifndef TEMPSENSOR_H
 #define TEMPSENSOR_H
 
