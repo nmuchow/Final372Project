@@ -1,8 +1,8 @@
-//Author: Nicole Muchow
+//Author: Bader, Edgar, Edmund, Emanuel, Nicole Muchow
+//
 //Date: 10 November 2018
 //
 //Assignment: Final Project
-//
 //
 //Description: This is the main file that will call appropriate functions
 //from the other files and will run the code for the project.
