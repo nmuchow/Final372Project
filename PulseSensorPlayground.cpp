@@ -1,20 +1,17 @@
 /*
    A central Playground object to manage a set of PulseSensors.
    See https://www.pulsesensor.com to get started.
-
    Copyright World Famous Electronics LLC - see LICENSE
    Contributors:
      Joel Murphy, https://pulsesensor.com
      Yury Gitman, https://pulsesensor.com
      Bradford Needham, @bneedhamia, https://bluepapertech.com
-
    Licensed under the MIT License, a copy of which
    should have been included with this software.
-
    This software is not intended for medical use.
 */
-#include <PulseSensorPlayground.h>
-
+#include "PulseSensorPlayground.h"
+#include "Interrupts.h"
 // Define the "this" pointer for the ISR
 PulseSensorPlayground *PulseSensorPlayground::OurThis;
 
@@ -27,10 +24,10 @@ PulseSensorPlayground::PulseSensorPlayground(int numberOfSensors) {
   SensorCount = (byte) numberOfSensors;
   Sensors = new PulseSensor[SensorCount];
 
-#if PULSE_SENSOR_TIMING_ANALYSIS
+//#if PULSE_SENSOR_TIMING_ANALYSIS
   // We want sample timing analysis, so we construct it.
-  pTiming = new PulseSensorTimingStatistics(MICROS_PER_READ, 500 * 30L);
-#endif // PULSE_SENSOR_TIMING_ANALYSIS
+  //pTiming = new PulseSensorTimingStatistics(MICROS_PER_READ, 500 * 30L);
+//#endif // PULSE_SENSOR_TIMING_ANALYSIS
 }
 
 boolean PulseSensorPlayground::PulseSensorPlayground::begin() {
@@ -52,12 +49,12 @@ boolean PulseSensorPlayground::PulseSensorPlayground::begin() {
 
   // Lastly, set up and turn on the interrupts.
 
-  if (UsingInterrupts) {
-    if (!PulseSensorPlaygroundSetupInterrupt()) {
-      // The user requested interrupts, but they aren't supported. Say so.
-      return false;
-    }
-  }
+  // if (UsingInterrupts) {
+  //   if (!PulseSensorPlaygroundSetupInterrupt()) {
+  //     // The user requested interrupts, but they aren't supported. Say so.
+  //     return false;
+  //   }
+  // }
 
   return true;
 }
@@ -87,20 +84,19 @@ boolean PulseSensorPlayground::sawNewSample() {
   /*
      If using interrupts, this function reads and clears the
      'saw a sample' flag that is set by the ISR.
-
      When not using interrupts, this function sees whether it's time
      to sample and, if so, reads the sample and processes it.
   */
 
-  if (UsingInterrupts) {
-    // Disable interrupts to avoid a race with the ISR.
-    DISABLE_PULSE_SENSOR_INTERRUPTS;
-    boolean sawOne = SawNewSample;
-    SawNewSample = false;
-    ENABLE_PULSE_SENSOR_INTERRUPTS;
+  // if (UsingInterrupts) {
+  //   // Disable interrupts to avoid a race with the ISR.
+  //   DISABLE_PULSE_SENSOR_INTERRUPTS;
+  //   boolean sawOne = SawNewSample;
+  //   SawNewSample = false;
+  //   ENABLE_PULSE_SENSOR_INTERRUPTS;
 
-    return sawOne;
-  }
+  //   return sawOne;
+  // }
 
   // Not using interrupts
 
@@ -110,41 +106,41 @@ boolean PulseSensorPlayground::sawNewSample() {
   }
   NextSampleMicros = nowMicros + MICROS_PER_READ;
 
-#if PULSE_SENSOR_TIMING_ANALYSIS
-  if (pTiming->recordSampleTime() <= 0) {
-    pTiming->outputStatistics(SerialOutput.getSerial());
-    for (;;); // Hang because we've disturbed the timing.
-  }
-#endif // PULSE_SENSOR_TIMING_ANALYSIS
+//#if PULSE_SENSOR_TIMING_ANALYSIS
+  //if (pTiming->recordSampleTime() <= 0) {
+    //pTiming->outputStatistics(SerialOutput.getSerial());
+    //for (;;); // Hang because we've disturbed the timing.
+  //}
+//#endif // PULSE_SENSOR_TIMING_ANALYSIS
 
   // Act as if the ISR was called.
-  onSampleTime();
+  //onSampleTime();   ///check this fucntions
 
   SawNewSample = false;
   return true;
 }
 
-void PulseSensorPlayground::onSampleTime() {
-  // Typically called from the ISR.
+// void PulseSensorPlayground::onSampleTime() {
+//   // Typically called from the ISR.
 
-  /*
-     Read the voltage from each PulseSensor.
-     We do this separately from processing the voltages
-     to minimize jitter in acquiring the signal.
-  */
-  for (int i = 0; i < SensorCount; ++i) {
-    Sensors[i].readNextSample();
-  }
+//   /*
+//      Read the voltage from each PulseSensor.
+//      We do this separately from processing the voltages
+//      to minimize jitter in acquiring the signal.
+//   */
+//   for (int i = 0; i < SensorCount; ++i) {
+//     Sensors[i].readNextSample();
+//   }
 
-  // Process those voltages.
-  for (int i = 0; i < SensorCount; ++i) {
-    Sensors[i].processLatestSample();
-    Sensors[i].updateLEDs();
-  }
+//   // Process those voltages.
+//   for (int i = 0; i < SensorCount; ++i) {
+//     Sensors[i].processLatestSample();
+//     Sensors[i].updateLEDs();
+//   }
 
-  // Set the flag that says we've read a sample since the Sketch checked.
-  SawNewSample = true;
- }
+//   // Set the flag that says we've read a sample since the Sketch checked.
+//   SawNewSample = true;
+//  }
 
 int PulseSensorPlayground::getLatestSample(int sensorIndex) {
   if (sensorIndex != constrain(sensorIndex, 0, SensorCount)) {

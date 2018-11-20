@@ -1,16 +1,13 @@
 /*
    Interrupt handling helper functions for PulseSensors.
    See https://www.pulsesensor.com to get started.
-
    Copyright World Famous Electronics LLC - see LICENSE
    Contributors:
      Joel Murphy, https://pulsesensor.com
      Yury Gitman, https://pulsesensor.com
      Bradford Needham, @bneedhamia, https://bluepapertech.com
-
    Licensed under the MIT License, a copy of which
    should have been included with this software.
-
    This software is not intended for medical use.
 */
 
@@ -18,13 +15,10 @@
    Any Sketch using the Playground must do one of two things:
    1) #define USE_ARDUINO_INTERRUPTS true - if using interrupts;
    2) #define USE_ARDUINO_INTERRUPTS false - if not using interrupts.
-
    Only the Sketch must define USE_ARDUINO_INTERRUPTS.
    If the Sketch doesn't define USE_ARDUINO_INTERRUPTS, or if some other file
    defines it as well, a link error will result.
-
    See notes in PulseSensorPlayground.h
-
    The code below is rather convoluted, with nested #if's.
    This structure is used to achieve two goals:
    1) Minimize the complexity the user has to deal with to use or
@@ -32,12 +26,10 @@
    2) Create an ISR() only if the Sketch uses interrupts.  Defining an
       ISR(), even if not used, may interfere with other libraries' use
       of interrupts.
-
    The nesting goes something like this:
      if the Sketch is being compiled...              #if defined(USE_ARDUINO_INTERRUPTS)
        if the user wants to use interrupts...        #if USE_ARDUINO_INTERRUPTS
          #if's for the various Arduino platforms...  #if defined(__AVR_ATmega328P__)...
-
    RULES of the constant USE_ARDUINO_INTERRUPTS:
    1) This file, interrupts.h, should be the only file that uses USE_ARDUINO_INTERRUPTS
      (although PulseSensorPlayground's comments talk about it to the user).
@@ -76,10 +68,8 @@
 /*
    (internal to the library)
    Sets up the sample timer interrupt for this Arduino Platform.
-
    Returns true if successful, false if we don't yet support
    the timer interrupt on this Arduino.
-
    NOTE: This is the declaration (vs. definition) of this function.
    See the definition (vs. declaration) of this function, below.
 */
@@ -95,9 +85,7 @@ boolean PulseSensorPlaygroundSetupInterrupt();
    the Sketch uses interrupts.
    Not doing this or doing it for every file that includes interrupts.h
    would cause a link error.
-
    To refer to this variable, use "PulseSensorPlayground::UsingInterrupts".
-
    See PulseSensorPlayground.h
 */
 boolean PulseSensorPlayground::UsingInterrupts = USE_ARDUINO_INTERRUPTS;
@@ -187,7 +175,6 @@ boolean PulseSensorPlaygroundSetupInterrupt() {
    using interrupts. If we defined it when we didn't use it,
    the ISR() will inappropriately intercept timer interrupts that
    we don't use when not using interrupts.
-
    We define the ISR that handles the timer that
    PulseSensorPlaygroundSetupInterrupt() set up.
    NOTE: Make sure that this ISR uses the appropriate timer for

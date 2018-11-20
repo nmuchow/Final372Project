@@ -1,27 +1,22 @@
 /*
    PulseSensor measurement manager.
    See https://www.pulsesensor.com to get started.
-
    Copyright World Famous Electronics LLC - see LICENSE
    Contributors:
      Joel Murphy, https://pulsesensor.com
      Yury Gitman, https://pulsesensor.com
      Bradford Needham, @bneedhamia, https://bluepapertech.com
-
    Licensed under the MIT License, a copy of which
    should have been included with this software.
-
    This software is not intended for medical use.
 */
-#include <PulseSensorPlayground.h>
-
+#include "PulseSensor.h"
+#include "PulseSensorPlayground.h"
 /*
    Internal constants controlling the rate of fading for the FadePin.
-
    FADE_SCALE = FadeLevel / FADE_SCALE is the corresponding PWM value.
    FADE_LEVEL_PER_SAMPLE = amount to decrease FadeLevel per sample.
    MAX_FADE_LEVEL = maximum FadeLevel value.
-
    The time (milliseconds) to fade to black =
      (MAX_FADE_LEVEL / FADE_LEVEL_PER_SAMPLE) * sample time (2ms)
 */
@@ -74,10 +69,10 @@ void PulseSensor::fadeOnPulse(int fadePin) {
 }
 
 void PulseSensor::setThreshold(int threshold) {
-  DISABLE_PULSE_SENSOR_INTERRUPTS;
+ // DISABLE_PULSE_SENSOR_INTERRUPTS;
   threshSetting = threshold;
   thresh = threshold;
-  ENABLE_PULSE_SENSOR_INTERRUPTS;
+  //ENABLE_PULSE_SENSOR_INTERRUPTS;
 }
 
 int PulseSensor::getLatestSample() {
@@ -102,10 +97,10 @@ unsigned long PulseSensor::getLastBeatTime() {
 
 boolean PulseSensor::sawStartOfBeat() {
   // Disable interrupts to avoid a race with the ISR.
-  DISABLE_PULSE_SENSOR_INTERRUPTS;
+  //DISABLE_PULSE_SENSOR_INTERRUPTS;
   boolean started = QS;
   QS = false;
-  ENABLE_PULSE_SENSOR_INTERRUPTS;
+  //ENABLE_PULSE_SENSOR_INTERRUPTS;
 
   return started;
 }
@@ -170,7 +165,7 @@ void PulseSensor::processLatestSample() {
       for (int i = 0; i <= 8; i++) {          // shift data in the rate array
         rate[i] = rate[i + 1];                // and drop the oldest IBI value
         runningTotal += rate[i];              // add up the 9 oldest IBI values
-      }
+      } 
 
       rate[9] = IBI;                          // add the latest IBI to the rate array
       runningTotal += rate[9];                // add the latest IBI to runningTotal

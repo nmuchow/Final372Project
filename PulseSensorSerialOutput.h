@@ -2,16 +2,13 @@
    Serial output formatter for the PulseSensor Playground.
    This object knows all about the formats for our Serial output.
    See https://www.pulsesensor.com to get started.
-
    Copyright World Famous Electronics LLC - see LICENSE
    Contributors:
      Joel Murphy, https://pulsesensor.com
      Yury Gitman, https://pulsesensor.com
      Bradford Needham, @bneedhamia, https://bluepapertech.com
-
    Licensed under the MIT License, a copy of which
    should have been included with this software.
-
    This software is not intended for medical use.
 */
 #ifndef PULSE_SENSOR_SERIAL_OUTPUT_H
@@ -44,7 +41,6 @@ class PulseSensorSerialOutput {
 
     /*
        Find what Serial stream we are configured to print to.
-
        Returns a pointer to the Serial we're configured for
        (for example Serial, Serial1, or a SoftwareSerial object),
        or NULL if no Serial output has been set up.
@@ -65,7 +61,6 @@ class PulseSensorSerialOutput {
     /*
        Output the per-beat data (Beats per Minute, Inter-beat Interval)
        for the given PulseSensor.
-
        sensorIndex = the sensor to output beat information about.
          Usually is the PulseSensor that a beat was detected on.
     */
