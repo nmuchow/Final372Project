@@ -217,6 +217,6 @@ void PulseSensor::updateLEDs() {
   }
 
   if (FadePin >= 0) {
-    analogWrite(FadePin, FadeLevel / FADE_SCALE);
+     analogWrite(FadePin, FadeLevel / FADE_SCALE);
   }
 }
